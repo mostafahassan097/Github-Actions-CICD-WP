@@ -22,26 +22,25 @@ jobs:
     - name: Checkout code
       # Check out repository code
       uses: actions/checkout@v3
-    - name: Cache dependencies
-      # Cache Node modules for faster builds   
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-    - name: Install PHP dependencies
-      # Install PHP dependencies with Composer
+    - name: Install Composer dependencies
+      # This will run `composer install`
+      # since that's its default command
       uses: php-actions/composer@v6
-    - name: Setup Node.js
-      # Setup Node.js environment
+
+    - name: Install Node.js LTS
+      # We use the LTS version of Node.js
+      # and cache packages installed via yarn
       uses: actions/setup-node@v3
       with:
         node-version: 'lts/*'
-    - name: Install NPM dependencies
-      # Install NPM dependencies from lock file  
-      run: npm ci
+        cache: 'yarn'
+
+    - name: Install Node.js dependencies
+      run: yarn install
+
     - name: Build theme
-      # Build theme static assets
-      run: npm run build
+      run: |
+        yarn run build
   # Deploy job  
  deploy:
     runs-on: ubuntu-latest
