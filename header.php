@@ -17,7 +17,7 @@
 
         use CowSay\Cow;
 
-        $bessie = new Cow( 'Hello, this is an example theme!' );
+        $bessie = new Cow( 'Hello, this is an Mostafa theme!' );
         $output = $bessie->say();
 
         printf( '<pre class="cowsay">%s</pre>', esc_html( $output ) );

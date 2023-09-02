@@ -9,21 +9,5 @@
   },
   "devDependencies": {
     "sass": "^1.55.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pressidium/example-theme-ci.git"
-  },
-  "keywords": [
-    "pressidium",
-    "github-actions",
-    "ci-cd"
-  ],
-  "author": "Konstantinos Pappas <konpap@pressidium.com>",
-  "license": "GPL-2.0-or-later",
-  "bugs": {
-    "url": "https://github.com/pressidium/example-theme-ci/issues"
-  },
-  "homepage": "https://github.com/pressidium/example-theme-ci#readme",
-  "private": true
+  }
 }
