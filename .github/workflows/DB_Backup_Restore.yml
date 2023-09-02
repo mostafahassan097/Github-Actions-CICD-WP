@@ -41,15 +41,15 @@ jobs:
         run: |
           if [ ${{ github.event.inputs.operation }} == 'backup' ]; then
             # Perform MySQL backup
-            mkdir -p $BACKUP_DIR
-            ssh user@remote-server "mysqldump -u$DB_USER -p$DB_PASSWORD $DB_NAME" > $BACKUP_DIR/backup_$TIMESTAMP.sql
+            #sudo mkdir -p $BACKUP_DIR
+            ssh root@myhs.mooo.com "mysqldump -u$DB_USER -p$DB_PASSWORD $DB_NAME" > $BACKUP_DIR/backup_$TIMESTAMP.sql
             echo "Backup completed!"
           elif [ ${{ github.event.inputs.operation }} == 'restore' ]; then
             # Perform MySQL restore
             if [ -z "${{ github.event.inputs.retention_days }}" ]; then
               echo "Restoration failed. Please provide a retention time for backups."
             else
-              ssh user@remote-server "find $BACKUP_DIR -type f -mtime +${{ github.event.inputs.retention_days }} -exec rm {} \;"
+              ssh root@myhs.mooo.com "find $BACKUP_DIR -type f -mtime +${{ github.event.inputs.retention_days }} -exec rm {} \;"
               echo "Restore completed!"
             fi
           else
