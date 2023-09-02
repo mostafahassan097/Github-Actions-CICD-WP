@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Replace with your actual domain name
+DOMAIN="myhs.mooo.com"
+EMAIL="your_email@gmail.com"  
+
 # Install required packages
 sudo apt update && sudo apt upgrade -y
 
@@ -54,6 +58,17 @@ server {
 }
 EOF
 
+# Install Let's Encrypt Certbot
+sudo apt install certbot python3-certbot-nginx -y
+# Create SSL cert
+sudo certbot --nginx -d $DOMAIN --non-interactive --agree-tos --email $EMAIL
+
+# The renewal command
+RENEWAL_COMMAND="0 0 1 * * /opt/letsencrypt/letsencrypt-auto renew"
+
+# Add the renewal command to the crontab
+(crontab -l 2>/dev/null; echo "$RENEWAL_COMMAND") | crontab -
+
 # Enable WordPress config
 sudo ln -s /etc/nginx/sites-available/wordpress.conf /etc/nginx/sites-enabled/
 sudo systemctl restart nginx
@@ -62,6 +77,8 @@ sudo systemctl restart nginx
 sudo mysql -e "CREATE DATABASE wordpress;"
 sudo mysql -e "CREATE USER 'wordpress'@'localhost' IDENTIFIED BY 'password';"
 sudo mysql -e "GRANT ALL ON wordpress.* TO 'wordpress'@'localhost';"
+sudo mysql -e "GRANT PROCESS ON *.* TO 'wordpress';"
+sudo mysql -e "FLUSH PRIVILEGES;"
 # Step 6: Download and Configure WordPress
 cd /var/www/html/wordpress/public_html
 wget https://wordpress.org/latest.tar.gz
