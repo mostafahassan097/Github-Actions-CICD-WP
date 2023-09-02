@@ -1,0 +1,57 @@
+name: MySQL Backup and Restore
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: 'Operation to perform (backup or restore)'
+        required: true
+        default: 'backup'
+      retention_days:
+        description: 'Retention time for backups in days'
+        required: false
+        default: 7
+  schedule:
+    - cron: '* * * * *' # Run daily at 12 AM
+
+jobs:
+  backup_restore:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-known-hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+          
+      - name: Set up MySQL
+        run: |
+          # Set up MySQL connection details from GitHub Secrets
+          export DB_USER=$DB_USER
+          export DB_PASSWORD=$DB_PASS
+          export DB_NAME=$DB_NAME
+          export BACKUP_DIR=/tmp/db-backups
+          export TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+
+      - name: Perform Backup or Restore
+        run: |
+          if [ ${{ github.event.inputs.operation }} == 'backup' ]; then
+            # Perform MySQL backup
+            #sudo mkdir -p $BACKUP_DIR
+            ssh root@myhs.mooo.com "mysqldump -u$DB_USER -p$DB_PASSWORD $DB_NAME" > $BACKUP_DIR/backup_$TIMESTAMP.sql
+            echo "Backup completed!"
+          elif [ ${{ github.event.inputs.operation }} == 'restore' ]; then
+            # Perform MySQL restore
+            if [ -z "${{ github.event.inputs.retention_days }}" ]; then
+              echo "Restoration failed. Please provide a retention time for backups."
+            else
+              ssh root@myhs.mooo.com "find $BACKUP_DIR -type f -mtime +${{ github.event.inputs.retention_days }} -exec rm {} \;"
+              echo "Restore completed!"
+            fi
+          else
+            echo "Invalid operation specified. Please use 'backup' or 'restore'."
+          fi
