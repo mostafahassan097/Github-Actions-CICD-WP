@@ -11,7 +11,7 @@ on:
 # Environment variables for reuse  
 env:
   SERVER: root@myhs.mooo.com
-  REMOTE_DIR: /mydir/wp-content/themes/mytheme
+  REMOTE_DIR: /var/www/html/wordpress/public_html/wp-content/themes/mytheme
 
 jobs:
 
@@ -22,6 +22,7 @@ jobs:
     - name: Checkout code
       # Check out repository code
       uses: actions/checkout@v3
+
     - name: Install Composer dependencies
       # This will run `composer install`
       # since that's its default command
@@ -39,8 +40,14 @@ jobs:
       run: yarn install
 
     - name: Build theme
+      # Run the `build` script for production,
+      # and the `staging` script for staging
       run: |
-        yarn run build
+        if [[ "${{ github.base_ref }}" == "main" || "${{ github.ref }}" == "refs/heads/main" ]]; then
+          yarn run build
+        else
+          yarn run staging
+        fi
   # Deploy job  
  deploy:
     runs-on: ubuntu-latest
@@ -59,4 +66,7 @@ jobs:
         ssh-agent -a $SSH_AUTH_SOCK > /dev/null
         ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
         
-        rsync -ravz -e "ssh -o StrictHostKeyChecking=no" ./theme/ ${{ env.SERVER }}:${{ env.REMOTE_DIR }}
+        rsync -ravz -e "ssh -o StrictHostKeyChecking=no" ./ ${{ env.SERVER }}:${{ env.REMOTE_DIR }} \
+        --exclude /.git/ \
+        --exclude /.github/ \
+        --exclude /helper_scripts
