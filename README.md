@@ -110,7 +110,7 @@ With this workflow in place, your WordPress theme will be built and deployed to 
 ![Image Description](https://github.com/mostafahassan097/Github-Actions-CICD-WP/blob/main/imgs/2.png)
 ![Image Description](https://github.com/mostafahassan097/Github-Actions-CICD-WP/blob/main/imgs/3.png)
 ![Image Description](https://github.com/mostafahassan097/Github-Actions-CICD-WP/blob/main/imgs/4.png)
-![Image Description](https://github.com/mostafahassan097/Github-Actions-CICD-WP/blob/main/Imgs/5.png)
+![Image Description](https://github.com/mostafahassan097/Github-Actions-CICD-WP/blob/main/imgs/5.png)
 ### Alternative Deployment Options
 
 While this workflow uses a manually configured server, there are other ways to deploy WordPress:
