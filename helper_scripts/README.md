@@ -4,7 +4,7 @@
 ## Table of Contents
 - [Overview](#overview)
 - [Getting Started](#getting-started)
-  - [Creating SSH Keys](#creating-ssh-keys)
+  - [Creating SSH Keys](#creating-ssh-keys-to-access-the-server-and-run-scripts)
   - [WordPress Installation Script](#wordpress-installation-script)
       - [Nginx Configuration Details](#nginx-configurations)
   - [Backup Script](#backup-script)
@@ -34,7 +34,7 @@ To create SSH keys, follow these steps:
 2. Run the following command: `ssh-keygen -t rsa -b 4096 -C "your_email@example.com"`
 3. Follow the prompts to set a passphrase for your key.
 4. Your public key will be saved in `~/.ssh/id_rsa.pub`.
-5. ssh-copy-id `user@remote_server`
+5. `ssh-copy-id user@remote_server`
 
 ### WordPress Installation Script
 

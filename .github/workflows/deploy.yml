@@ -60,4 +60,5 @@ jobs:
         rsync -ravz -e "ssh -o StrictHostKeyChecking=no" ./ ${{ env.SERVER }}:${{ env.REMOTE_DIR }} \
         --exclude /.git/ \
         --exclude /.github/ \
+        --exclude /imgs/ \
         --exclude /helper_scripts
