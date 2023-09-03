@@ -1,4 +1,4 @@
-# Deploy Website Theme
+## Deploy Website Theme
 # This workflow handles building and deploying the website theme
 
 name: Deploy Website Theme 
